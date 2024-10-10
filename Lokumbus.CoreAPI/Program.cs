@@ -62,6 +62,7 @@ builder.Services.AddScoped<IPersonaRepository, PersonaRepository>();
 builder.Services.AddScoped<ILocationRepository, LocationRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<IAreaRepository, AreaRepository>();
 // Add other repository registrations here as needed
 
 // =====================================
@@ -74,6 +75,7 @@ builder.Services.AddScoped<IPersonaService, PersonaService>();
 builder.Services.AddScoped<ILocationService, LocationService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IAreaService, AreaService>();
 // Add other service registrations here as needed
 
 // =====================================
