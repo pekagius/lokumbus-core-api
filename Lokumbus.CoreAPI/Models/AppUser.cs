@@ -12,7 +12,7 @@ public class AppUser
     public List<string>? PersonaIds { get; set; }
     public string? Username { get; set; }
     public string? Email { get; set; }
-    public string? Password { get; set; }
+    public string? PasswordHash { get; set; }
     public string? FirstName { get; set; }
     public string? LastName { get; set; }
     public string? Phone { get; set; }
@@ -32,4 +32,10 @@ public class AppUser
     public string? LastLoginIpAddress { get; set; }
     public DateTime? LastLoginAt { get; set; }
     public Dictionary<string, object>? Metadata { get; set; }
+    public string? RefreshToken { get; set; }
+    public DateTime? RefreshTokenExpiryTime { get; set; }
+    
+    // Navigational Property for Auth Entries
+    [BsonIgnore]
+    public List<Auth>? Auths { get; set; }
 }

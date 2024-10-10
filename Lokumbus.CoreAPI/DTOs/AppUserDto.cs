@@ -84,6 +84,8 @@ public class AppUserDto
     /// Indicates whether the user's email is verified.
     /// </summary>
     public bool? IsVerified { get; set; }
+    public string? RefreshToken { get; set; }
+    public DateTime? RefreshTokenExpiryTime { get; set; }
+    public string? PasswordHash { get; set; }
 
-    // Additional fields can be added here as needed.
 }

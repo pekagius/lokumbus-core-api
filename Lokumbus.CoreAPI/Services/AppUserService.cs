@@ -1,4 +1,3 @@
-using Confluent.Kafka;
 using Lokumbus.CoreAPI.DTOs;
 using Lokumbus.CoreAPI.DTOs.Create;
 using Lokumbus.CoreAPI.DTOs.Update;
@@ -6,135 +5,167 @@ using Lokumbus.CoreAPI.Helpers;
 using Lokumbus.CoreAPI.Models;
 using Lokumbus.CoreAPI.Repositories.Interfaces;
 using Lokumbus.CoreAPI.Services.Interfaces;
+using Confluent.Kafka;
 using Mapster;
 
 
-namespace Lokumbus.CoreAPI.Services;
-
-/// <summary>
-/// Implements the IAppUserService interface for AppUser business logic.
-/// </summary>
-public class AppUserService : IAppUserService
+namespace Lokumbus.CoreAPI.Services
 {
-    private readonly IAppUserRepository _appUserRepository;
-    private readonly TypeAdapterConfig _mapConfig;
-    private readonly IProducer<Null, string> _kafkaProducer;
-    private readonly string _kafkaTopic;
-
     /// <summary>
-    /// Initializes a new instance of the AppUserService class.
+    /// Implements the IAppUserService interface for AppUser business logic.
     /// </summary>
-    /// <param name="appUserRepository">The AppUser repository instance.</param>
-    /// <param name="mapConfig">The Mapster configuration.</param>
-    /// <param name="configuration">The application configuration.</param>
-    public AppUserService(IAppUserRepository appUserRepository, TypeAdapterConfig mapConfig,
-        IConfiguration configuration)
+    public class AppUserService : IAppUserService
     {
-        _appUserRepository = appUserRepository;
-        _mapConfig = mapConfig;
+        private readonly IAppUserRepository _appUserRepository;
+        private readonly TypeAdapterConfig _mapConfig;
+        private readonly IProducer<Null, string> _kafkaProducer;
+        private readonly string _kafkaTopic;
+        private readonly IConfiguration _configuration;
 
-        // Configure Kafka producer
-        var producerConfig = new ProducerConfig
+        /// <summary>
+        /// Initializes a new instance of the AppUserService class.
+        /// </summary>
+        /// <param name="appUserRepository">The AppUser repository instance.</param>
+        /// <param name="mapConfig">The Mapster configuration.</param>
+        /// <param name="configuration">The application configuration.</param>
+        public AppUserService(IAppUserRepository appUserRepository, TypeAdapterConfig mapConfig,
+            IConfiguration configuration)
         {
-            BootstrapServers = configuration.GetSection("KafkaSettings").GetValue<string>("BootstrapServers")
-        };
-        _kafkaProducer = new ProducerBuilder<Null, string>(producerConfig).Build();
+            _appUserRepository = appUserRepository;
+            _mapConfig = mapConfig;
+            _configuration = configuration;
 
-        // Retrieve Kafka topic from configuration
-        var topics = configuration.GetSection("KafkaSettings").GetSection("Topics").Get<string[]>();
-        _kafkaTopic = topics != null && topics.Length > 0
-            ? topics[0]
-            : throw new ArgumentException("Kafka topic is not configured.");
-    }
+            // Configure Kafka producer
+            var producerConfig = new ProducerConfig
+            {
+                BootstrapServers = configuration.GetSection("KafkaSettings").GetValue<string>("BootstrapServers")
+            };
+            _kafkaProducer = new ProducerBuilder<Null, string>(producerConfig).Build();
 
-    /// <inheritdoc />
-    public async Task<AppUserDto> GetByIdAsync(string id)
-    {
-        var appUser = await _appUserRepository.GetByIdAsync(id);
-        if (appUser == null)
-        {
-            throw new KeyNotFoundException($"AppUser with ID {id} was not found.");
+            // Retrieve Kafka topic from configuration
+            var topics = configuration.GetSection("KafkaSettings").GetSection("Topics").Get<string[]>();
+            _kafkaTopic = topics != null && topics.Length > 0
+                ? topics[0]
+                : throw new ArgumentException("Kafka topic is not configured.");
         }
 
-        return appUser.Adapt<AppUserDto>(_mapConfig);
-    }
-
-    /// <inheritdoc />
-    public async Task<IEnumerable<AppUserDto>> GetAllAsync()
-    {
-        var appUsers = await _appUserRepository.GetAllAsync();
-        return appUsers.Adapt<IEnumerable<AppUserDto>>(_mapConfig);
-    }
-
-    /// <inheritdoc />
-    public async Task<AppUserDto> CreateAsync(CreateAppUserDto createDto)
-    {
-        // Map DTO to domain model
-        var appUser = createDto.Adapt<AppUser>(_mapConfig);
-
-        // TODO: Implement password hashing
-        // appUser.Password = HashPassword(createDto.Password);
-
-        // Set creation timestamp
-        appUser.CreatedAt = DateTime.UtcNow;
-        appUser.IsActive = true;
-        appUser.IsVerified = false;
-
-        // Insert the new user into the repository
-        await _appUserRepository.CreateAsync(appUser);
-
-        // Publish creation event to Kafka
-        var message = appUser.Adapt<AppUserDto>(_mapConfig).ToJson();
-        await _kafkaProducer.ProduceAsync(_kafkaTopic, new Message<Null, string> { Value = message });
-
-        return appUser.Adapt<AppUserDto>(_mapConfig);
-    }
-
-    /// <inheritdoc />
-    public async Task UpdateAsync(string id, UpdateAppUserDto updateDto)
-    {
-        // Retrieve existing user
-        var existingUser = await _appUserRepository.GetByIdAsync(id);
-        if (existingUser == null)
+        /// <inheritdoc />
+        public async Task<AppUserDto> GetByIdAsync(string id)
         {
-            throw new KeyNotFoundException($"AppUser with ID {id} was not found.");
+            var appUser = await _appUserRepository.GetByIdAsync(id);
+            if (appUser == null)
+            {
+                throw new KeyNotFoundException($"AppUser mit ID {id} wurde nicht gefunden.");
+            }
+
+            return appUser.Adapt<AppUserDto>(_mapConfig);
         }
 
-        // Map update DTO to existing user
-        updateDto.Adapt(existingUser, _mapConfig);
-        existingUser.UpdatedAt = DateTime.UtcNow;
-
-        // Handle password update if provided
-        if (!string.IsNullOrEmpty(updateDto.Password))
+        /// <inheritdoc />
+        public async Task<AppUserDto> GetByEmailAsync(string email)
         {
-            // TODO: Implement password hashing
-            // existingUser.Password = HashPassword(updateDto.Password);
+            var appUser = await _appUserRepository.GetByEmailAsync(email);
+            if (appUser == null)
+            {
+                throw new KeyNotFoundException($"AppUser mit Email {email} wurde nicht gefunden.");
+            }
+
+            return appUser.Adapt<AppUserDto>(_mapConfig);
         }
 
-        // Update the user in the repository
-        await _appUserRepository.UpdateAsync(existingUser);
-
-        // Publish update event to Kafka
-        var message = existingUser.Adapt<AppUserDto>(_mapConfig).ToJson();
-        await _kafkaProducer.ProduceAsync(_kafkaTopic, new Message<Null, string> { Value = message });
-    }
-
-    /// <inheritdoc />
-    public async Task DeleteAsync(string id)
-    {
-        // Retrieve existing user
-        var existingUser = await _appUserRepository.GetByIdAsync(id);
-        if (existingUser == null)
+        /// <inheritdoc />
+        public async Task<IEnumerable<AppUserDto>> GetAllAsync()
         {
-            throw new KeyNotFoundException($"AppUser with ID {id} was not found.");
+            var appUsers = await _appUserRepository.GetAllAsync();
+            return appUsers.Adapt<IEnumerable<AppUserDto>>(_mapConfig);
         }
 
-        // Delete the user from the repository
-        await _appUserRepository.DeleteAsync(id);
+        /// <inheritdoc />
+        public async Task<AppUserDto> CreateAsync(CreateAppUserDto createDto)
+        {
+            var hashedPassword = PasswordHelper.HashPassword(createDto.Password!);
 
-        // Publish deletion event to Kafka
-        var message = $"AppUser with ID {id} has been deleted.";
-        await _kafkaProducer.ProduceAsync(_kafkaTopic, new Message<Null, string> { Value = message });
+            var appUser = createDto.Adapt<AppUser>(_mapConfig);
+            appUser.PasswordHash = hashedPassword;
+
+            appUser.CreatedAt = DateTime.UtcNow;
+            appUser.IsActive = true;
+            appUser.IsVerified = false;
+
+            await _appUserRepository.CreateAsync(appUser);
+
+            var message = appUser.Adapt<AppUserDto>(_mapConfig).ToJson();
+            await _kafkaProducer.ProduceAsync(_kafkaTopic, new Message<Null, string> { Value = message });
+
+            return appUser.Adapt<AppUserDto>(_mapConfig);
+        }
+
+        /// <inheritdoc />
+        public async Task UpdateAsync(string id, UpdateAppUserDto updateDto)
+        {
+            var existingUser = await _appUserRepository.GetByIdAsync(id);
+            if (existingUser == null)
+            {
+                throw new KeyNotFoundException($"AppUser mit ID {id} wurde nicht gefunden.");
+            }
+
+            updateDto.Adapt(existingUser, _mapConfig);
+            existingUser.UpdatedAt = DateTime.UtcNow;
+
+            if (!string.IsNullOrEmpty(updateDto.Password))
+            {
+                existingUser.PasswordHash = PasswordHelper.HashPassword(updateDto.Password);
+            }
+
+            if (!string.IsNullOrEmpty(existingUser.RefreshToken))
+            {
+                existingUser.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(
+                    _configuration.GetSection("JwtSettings").GetValue<int>("RefreshTokenExpirationDays")
+                );
+            }
+
+            await _appUserRepository.UpdateAsync(existingUser);
+            var message = existingUser.Adapt<AppUserDto>(_mapConfig).ToJson();
+            await _kafkaProducer.ProduceAsync(_kafkaTopic, new Message<Null, string> { Value = message });
+        }
+
+        /// <inheritdoc />
+        public async Task DeleteAsync(string id)
+        {
+            var existingUser = await _appUserRepository.GetByIdAsync(id);
+            if (existingUser == null)
+            {
+                throw new KeyNotFoundException($"AppUser mit ID {id} wurde nicht gefunden.");
+            }
+
+            await _appUserRepository.DeleteAsync(id);
+
+            var message = $"AppUser mit ID {id} wurde gelöscht.";
+            await _kafkaProducer.ProduceAsync(_kafkaTopic, new Message<Null, string> { Value = message });
+        }
+
+        /// <inheritdoc />
+        public async Task SetRefreshTokenAsync(string userId, string refreshToken)
+        {
+            var user = await _appUserRepository.GetByIdAsync(userId);
+            if (user == null)
+            {
+                throw new KeyNotFoundException($"AppUser mit ID {userId} wurde nicht gefunden.");
+            }
+
+            user.RefreshToken = refreshToken;
+            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(
+                _configuration.GetSection("JwtSettings").GetValue<int>("RefreshTokenExpirationDays")
+            );
+
+            await _appUserRepository.UpdateAsync(user);
+        }
+
+        /// <inheritdoc />
+        public async Task<bool> ValidateRefreshTokenAsync(string userId, string refreshToken)
+        {
+            var user = await _appUserRepository.GetByIdAsync(userId);
+            return user.RefreshToken == refreshToken && !(user.RefreshTokenExpiryTime <= DateTime.UtcNow);
+        }
     }
 }
-

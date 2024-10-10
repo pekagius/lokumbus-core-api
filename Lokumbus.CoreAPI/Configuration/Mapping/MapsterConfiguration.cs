@@ -9,19 +9,23 @@ using Mapster.Utils;
 
 namespace Lokumbus.CoreAPI.Configuration.Mapping
 {
+    /// <summary>
+    /// Configures Mapster type mappings.
+    /// </summary>
     public class MapsterConfiguration
     {
+        /// <summary>
+        /// Registers all type mappings with the provided Mapster configuration.
+        /// </summary>
+        /// <param name="config">The Mapster configuration to register mappings with.</param>
         public static void RegisterMappings(TypeAdapterConfig config)
         {
-            // Schritt 1: Registrieren Sie den benutzerdefinierten Converter
-            config.ScanInheritedTypes(Assembly.GetExecutingAssembly());
-            config.Apply(new DictionaryStringObjectConverter());
-
             // Mapping von CreateAppUserDto zu AppUser
             config.NewConfig<CreateAppUserDto, AppUser>()
                 .Map(dest => dest.CreatedAt, src => DateTime.UtcNow)
                 .Map(dest => dest.IsActive, src => true)
-                .Map(dest => dest.IsVerified, src => false);
+                .Map(dest => dest.IsVerified, src => false)
+                .Map(dest => dest.PasswordHash, src => src.Password); // Setze Passwort-Hash
 
             // Mapping von UpdateAppUserDto zu AppUser
             config.NewConfig<UpdateAppUserDto, AppUser>()
@@ -35,7 +39,10 @@ namespace Lokumbus.CoreAPI.Configuration.Mapping
                 .Ignore(dest => dest.LastLoginIpAddress)
                 .Ignore(dest => dest.LastLoginAt)
                 .Ignore(dest => dest.Metadata)
-                .Ignore(dest => dest.Password); // Passwort separat behandeln, falls nötig
+                .Ignore(dest => dest.PasswordHash);
+
+            // Mapping von AppUser zu AppUserDto
+            config.NewConfig<AppUser, AppUserDto>();
 
             // Mapping von AppUser zu AppUserDto
             config.NewConfig<AppUser, AppUserDto>();
@@ -82,19 +89,22 @@ namespace Lokumbus.CoreAPI.Configuration.Mapping
             // Mapping von Location zu LocationDto
             config.NewConfig<Location, LocationDto>();
 
-            // Mapping von CreateAreaDto zu Area
-            config.NewConfig<CreateAreaDto, Area>()
-                .Map(dest => dest.CreatedAt, src => DateTime.UtcNow)
-                .Map(dest => dest.IsActive, src => true);
+            // Mapping für Auth
 
-            // Mapping von UpdateAreaDto zu Area  
-            config.NewConfig<UpdateAreaDto, Area>()
+            // Mapping von CreateAuthDto zu Auth
+            config.NewConfig<CreateAuthDto, Auth>()
+                .Map(dest => dest.CreatedAt, src => DateTime.UtcNow)
+                .Map(dest => dest.IsActive, src => src.IsActive ?? true);
+
+            // Mapping von UpdateAuthDto zu Auth
+            config.NewConfig<UpdateAuthDto, Auth>()
                 .Map(dest => dest.UpdatedAt, src => DateTime.UtcNow)
                 .Ignore(dest => dest.Id)
-                .Ignore(dest => dest.CreatedAt);
+                .Ignore(dest => dest.CreatedAt)
+                .Ignore(dest => dest.UserId);
 
-            // Mapping von Area zu AreaDto
-            config.NewConfig<Area, AreaDto>();
+            // Mapping von Auth zu AuthDto
+            config.NewConfig<Auth, AuthDto>();
         }
     }
 }

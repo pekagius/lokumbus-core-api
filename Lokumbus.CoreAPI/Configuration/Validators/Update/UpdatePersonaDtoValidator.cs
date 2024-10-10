@@ -1,23 +1,23 @@
 using FluentValidation;
-using Lokumbus.CoreAPI.DTOs.Create;
+using Lokumbus.CoreAPI.DTOs.Update;
 using MongoDB.Bson;
 
-namespace Lokumbus.CoreAPI.Configuration.Validators;
+namespace Lokumbus.CoreAPI.Configuration.Validators.Update;
 
 /// <summary>
-/// Validator for CreatePersonaDto using FluentValidation.
+/// Validator for UpdatePersonaDto using FluentValidation.
 /// </summary>
-public class CreatePersonaDtoValidator : AbstractValidator<CreatePersonaDto>
+public class UpdatePersonaDtoValidator : AbstractValidator<UpdatePersonaDto>
 {
     /// <summary>
-    /// Initializes a new instance of the CreatePersonaDtoValidator class.
+    /// Initializes a new instance of the UpdatePersonaDtoValidator class.
     /// </summary>
-    public CreatePersonaDtoValidator()
+    public UpdatePersonaDtoValidator()
     {
         // Validate UserId
         RuleFor(x => x.UserId)
-            .NotEmpty().WithMessage("UserId is required.")
-            .Must(IsValidObjectId).WithMessage("UserId must be a valid ObjectId.");
+            .Must(IsValidObjectId).WithMessage("UserId must be a valid ObjectId.")
+            .When(x => !string.IsNullOrEmpty(x.UserId));
 
         // Validate Name
         RuleFor(x => x.Name)
@@ -84,14 +84,15 @@ public class CreatePersonaDtoValidator : AbstractValidator<CreatePersonaDto>
             .Must(ids => ids == null || ids.All(id => IsValidObjectId(id)))
             .WithMessage("All InterestIds must be valid ObjectIds.");
 
-        // Validate CreatedAt
-        RuleFor(x => x.CreatedAt)
-            .LessThanOrEqualTo(DateTime.UtcNow).WithMessage("CreatedAt cannot be in the future.")
-            .When(x => x.CreatedAt.HasValue);
+        // Validate UpdatedAt
+        RuleFor(x => x.UpdatedAt)
+            .LessThanOrEqualTo(DateTime.UtcNow).WithMessage("UpdatedAt cannot be in the future.")
+            .When(x => x.UpdatedAt.HasValue);
 
         // Validate IsActive
         RuleFor(x => x.IsActive)
-            .NotNull().WithMessage("IsActive cannot be null.");
+            .NotNull().WithMessage("IsActive cannot be null.")
+            .When(x => x.IsActive.HasValue);
 
         // Validate Metadata
         RuleFor(x => x.Metadata)

@@ -1,4 +1,5 @@
 using Lokumbus.CoreAPI.Models;
+using Lokumbus.CoreAPI.Models.ValueObjects;
 
 namespace Lokumbus.CoreAPI.DTOs;
 

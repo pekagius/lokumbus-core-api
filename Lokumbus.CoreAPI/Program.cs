@@ -1,12 +1,18 @@
+using System.Text;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Lokumbus.CoreAPI.Configuration.Bootstrapping;
 using Lokumbus.CoreAPI.Configuration.Mapping;
 using Lokumbus.CoreAPI.Configuration.Validators;
+using Lokumbus.CoreAPI.Configuration.Validators.Auth;
+using Lokumbus.CoreAPI.Configuration.Validators.Create;
 using Lokumbus.CoreAPI.Repositories;
 using Lokumbus.CoreAPI.Repositories.Interfaces;
 using Lokumbus.CoreAPI.Services;
 using Lokumbus.CoreAPI.Services.Interfaces;
 using Mapster;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
 
 // Create a builder for the WebApplication
@@ -55,6 +61,7 @@ builder.Services.AddScoped<IAppUserRepository, AppUserRepository>();
 builder.Services.AddScoped<IPersonaRepository, PersonaRepository>();
 builder.Services.AddScoped<ILocationRepository, LocationRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 // Add other repository registrations here as needed
 
 // =====================================
@@ -66,6 +73,7 @@ builder.Services.AddScoped<IAppUserService, AppUserService>();
 builder.Services.AddScoped<IPersonaService, PersonaService>();
 builder.Services.AddScoped<ILocationService, LocationService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 // Add other service registrations here as needed
 
 // =====================================
@@ -73,16 +81,47 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 // =====================================
 
 builder.Services.AddFluentValidationAutoValidation();
-builder.Services.AddValidatorsFromAssemblyContaining<CreatePersonaDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateAuthDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<LoginDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<TokenDtoValidator>();
+// =====================================
+// Mapster Configuration
+// =====================================
 
-// =====================================
-// Mapster Configuration
-// =====================================
-// Mapster Configuration
-// Mapster Configuration
+// Configure Mapster with the MappingProfile
 var config = TypeAdapterConfig.GlobalSettings;
 MapsterConfiguration.RegisterMappings(config);
 builder.Services.AddSingleton(config);
+
+
+// =====================================
+// JWT Authentication Configuration
+// =====================================
+
+var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+var secretKey = jwtSettings.GetValue<string>("SecretKey");
+
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(options =>
+    {
+        options.RequireHttpsMetadata = true;
+        options.SaveToken = true;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = jwtSettings.GetValue<string>("Issuer"),
+            ValidAudience = jwtSettings.GetValue<string>("Audience"),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
+            ClockSkew = TimeSpan.Zero
+        };
+    });
 
 
 // =====================================
@@ -96,23 +135,58 @@ builder.Services.AddControllers();
 // =====================================
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    // JWT-Token in Swagger integrieren
+    options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"",
+        Name = "Authorization",
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Scheme = "Bearer",
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+        BearerFormat = "JWT"
+    });
+
+    options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    {
+        {
+            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            {
+                Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                {
+                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
 
 // =====================================
 // CORS Configuration (Optional)
 // =====================================
 
 // If your API needs to be accessed from different origins, configure CORS here.
+// Example: Allow all origins (not recommended for production)
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll",
-        builder=>
+        builder =>
         {
             builder.AllowAnyOrigin()
                    .AllowAnyMethod()
                    .AllowAnyHeader();
         });
 });
+
+// =====================================
+// Hosted Services (Optional)
+// =====================================
+
+// Beispiel: Hosted Service für Kafka-Topic-Bootstrap
+builder.Services.AddHostedService<BootstrapKafka>();
 
 // =====================================
 // Build the Application

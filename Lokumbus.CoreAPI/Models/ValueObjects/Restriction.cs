@@ -1,4 +1,4 @@
-namespace Lokumbus.CoreAPI.Models
+namespace Lokumbus.CoreAPI.Models.ValueObjects
 {
     public class Restriction
     {

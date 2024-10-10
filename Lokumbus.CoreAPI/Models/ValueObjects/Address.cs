@@ -1,7 +1,7 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace Lokumbus.CoreAPI.Models
+namespace Lokumbus.CoreAPI.Models.ValueObjects
 {
     public class Address
     {

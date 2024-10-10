@@ -1,7 +1,7 @@
 using FluentValidation;
 using Lokumbus.CoreAPI.DTOs.Update;
 
-namespace Lokumbus.CoreAPI.Configuration.Validators;
+namespace Lokumbus.CoreAPI.Configuration.Validators.Update;
 
 public class UpdateLocationDtoValidator : AbstractValidator<UpdateLocationDto>
 {
