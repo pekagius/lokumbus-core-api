@@ -12,5 +12,8 @@ namespace Lokumbus.CoreAPI.Models
         public string? Code { get; set; }
         public DateTime? SentAt { get; set; }
         public DateTime? AcceptedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public bool IsActive { get; set; }
     }
 }

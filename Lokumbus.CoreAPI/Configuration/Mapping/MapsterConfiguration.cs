@@ -11,15 +11,9 @@ using Mapster.Utils;
 
 namespace Lokumbus.CoreAPI.Configuration.Mapping
 {
-    /// <summary>
-    /// Configures Mapster type mappings.
-    /// </summary>
     public class MapsterConfiguration
     {
-        /// <summary>
-        /// Registers all type mappings with the provided Mapster configuration.
-        /// </summary>
-        /// <param name="config">The Mapster configuration to register mappings with.</param>
+        
         public static void RegisterMappings(TypeAdapterConfig config)
         {
             config.ScanInheritedTypes(Assembly.GetExecutingAssembly());
@@ -215,52 +209,66 @@ namespace Lokumbus.CoreAPI.Configuration.Mapping
 
             // Mapping from AlertMessage to AlertMessageDto
             config.NewConfig<AlertMessage, AlertMessageDto>();
-            
-            
+
             config.NewConfig<CreateDiscountDto, Discount>()
                 .Map(dest => dest.CreatedAt, src => DateTime.UtcNow)
                 .Map(dest => dest.UpdatedAt, src => DateTime.UtcNow);
-
-
+            
             config.NewConfig<UpdateDiscountDto, Discount>()
                 .Map(dest => dest.UpdatedAt, src => DateTime.UtcNow)
                 .Ignore(dest => dest.Id)
                 .Ignore(dest => dest.CreatedAt);
-            
+
             config.NewConfig<Discount, DiscountDto>();
             
-            // *** Mapping von CreateFriendshipDto zu Friendship ***
             config.NewConfig<CreateFriendshipDto, Friendship>()
                 .Map(dest => dest.CreatedAt, src => DateTime.UtcNow)
                 .Map(dest => dest.UpdatedAt, src => DateTime.UtcNow)
                 .Map(dest => dest.IsAccepted, src => false)
                 .Map(dest => dest.Metadata, src => new Dictionary<string, object>());
-
-            // *** Mapping von UpdateFriendshipDto zu Friendship ***
+            
             config.NewConfig<UpdateFriendshipDto, Friendship>()
                 .Map(dest => dest.UpdatedAt, src => DateTime.UtcNow)
                 .Ignore(dest => dest.Id)
                 .Ignore(dest => dest.CreatedAt)
                 .Ignore(dest => dest.PersonaId)
                 .Ignore(dest => dest.FriendPersonaId);
-    
-            // *** Mapping von Friendship zu FriendshipDto ***
+            
             config.NewConfig<Friendship, FriendshipDto>();
             
-            // Mapping von CreateInterestDto zu Interest
             config.NewConfig<CreateInterestDto, Interest>()
                 .Map(dest => dest.CreatedAt, src => DateTime.UtcNow)
                 .Map(dest => dest.IsActive, src => src.IsActive ?? true);
 
-            // Mapping von UpdateInterestDto zu Interest
             config.NewConfig<UpdateInterestDto, Interest>()
                 .Map(dest => dest.UpdatedAt, src => DateTime.UtcNow)
                 .Ignore(dest => dest.Id)
                 .Ignore(dest => dest.CreatedAt)
                 .Ignore(dest => dest.Metadata);
-
-            // Mapping von Interest zu InterestDto
+            
             config.NewConfig<Interest, InterestDto>();
+            
+            config.NewConfig<CreateInterestRelationDto, InterestRelation>()
+                .Map(dest => dest.CreatedAt, src => DateTime.UtcNow)
+                .Map(dest => dest.IsActive, src => true);
+            
+            config.NewConfig<UpdateInterestRelationDto, InterestRelation>()
+                .Map(dest => dest.UpdatedAt, src => DateTime.UtcNow)
+                .Ignore(dest => dest.Id)
+                .Ignore(dest => dest.CreatedAt);
+            
+            config.NewConfig<InterestRelation, InterestRelationDto>();
+            
+            config.NewConfig<CreateInviteDto, Invite>()
+                .Map(dest => dest.CreatedAt, src => DateTime.UtcNow)
+                .Map(dest => dest.IsActive, src => true);
+            
+            config.NewConfig<UpdateInviteDto, Invite>()
+                .Map(dest => dest.UpdatedAt, src => DateTime.UtcNow)
+                .Ignore(dest => dest.Id)
+                .Ignore(dest => dest.CreatedAt);
+
+            config.NewConfig<Invite, InviteDto>();
         }
     }
 }

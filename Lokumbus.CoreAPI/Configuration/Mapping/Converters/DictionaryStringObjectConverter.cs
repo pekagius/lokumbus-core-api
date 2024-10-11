@@ -75,3 +75,5 @@ namespace Lokumbus.CoreAPI.Configuration.Mapping.Converters
         }
     }
 }
+
+// Todo: Wir müssen den converter noch so anpassen, dass er bei Null-Values den BSON-Null-Wert verwendet, damit die Datenbank keine Fehler ausgibt.

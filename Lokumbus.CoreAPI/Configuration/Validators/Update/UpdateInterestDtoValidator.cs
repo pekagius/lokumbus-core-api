@@ -2,7 +2,7 @@ using FluentValidation;
 using Lokumbus.CoreAPI.DTOs.Update;
 using MongoDB.Bson;
 
-namespace Lokumbus.CoreAPI.Configuration.Validators
+namespace Lokumbus.CoreAPI.Configuration.Validators.Update
 {
     /// <summary>
     /// Validator for UpdateInterestDto using FluentValidation.

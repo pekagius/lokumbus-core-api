@@ -13,4 +13,7 @@ public class InterestRelation
     public string RelatedInterestId { get; set; }
     public Interest RelatedInterest { get; set; } = null!;
     public string? Weight { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public bool IsActive { get; set; }
+    public DateTime UpdatedAt { get; set; }
 }
