@@ -76,6 +76,8 @@ builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();
 builder.Services.AddScoped<IFriendshipRepository, FriendshipRepository>();
 builder.Services.AddScoped<IInterestRepository, InterestRepository>();
 builder.Services.AddScoped<IInterestRelationRepository, InterestRelationRepository>();
+builder.Services.AddScoped<IInviteRepository, InviteRepository>();
+builder.Services.AddScoped<IOrganizerRepository, OrganizerRepository>();
 // Add other repository registrations here as needed
 
 // =====================================
@@ -100,6 +102,8 @@ builder.Services.AddScoped<IDiscountService, DiscountService>();
 builder.Services.AddScoped<IFriendshipService, FriendshipService>();
 builder.Services.AddScoped<IInterestService, InterestService>();
 builder.Services.AddScoped<IInterestRelationService, InterestRelationService>();
+builder.Services.AddScoped<IInviteService, InviteService>();
+builder.Services.AddScoped<IOrganizerService, OrganizerService>();
 // Add other service registrations here as needed
 
 // =====================================
