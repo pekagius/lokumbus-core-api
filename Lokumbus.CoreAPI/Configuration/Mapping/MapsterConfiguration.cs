@@ -246,6 +246,21 @@ namespace Lokumbus.CoreAPI.Configuration.Mapping
     
             // *** Mapping von Friendship zu FriendshipDto ***
             config.NewConfig<Friendship, FriendshipDto>();
+            
+            // Mapping von CreateInterestDto zu Interest
+            config.NewConfig<CreateInterestDto, Interest>()
+                .Map(dest => dest.CreatedAt, src => DateTime.UtcNow)
+                .Map(dest => dest.IsActive, src => src.IsActive ?? true);
+
+            // Mapping von UpdateInterestDto zu Interest
+            config.NewConfig<UpdateInterestDto, Interest>()
+                .Map(dest => dest.UpdatedAt, src => DateTime.UtcNow)
+                .Ignore(dest => dest.Id)
+                .Ignore(dest => dest.CreatedAt)
+                .Ignore(dest => dest.Metadata);
+
+            // Mapping von Interest zu InterestDto
+            config.NewConfig<Interest, InterestDto>();
         }
     }
 }

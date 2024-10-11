@@ -74,6 +74,7 @@ builder.Services.AddScoped<IAlertMessageRepository, AlertMessageRepository>();
 builder.Services.AddScoped<IChatMessageRepository, ChatMessageRepository>();
 builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();
 builder.Services.AddScoped<IFriendshipRepository, FriendshipRepository>();
+builder.Services.AddScoped<IInterestRepository, InterestRepository>();
 // Add other repository registrations here as needed
 
 // =====================================
@@ -96,6 +97,7 @@ builder.Services.AddScoped<IAlertMessageService, AlertMessageService>();
 builder.Services.AddScoped<IChatMessageService, ChatMessageService>();
 builder.Services.AddScoped<IDiscountService, DiscountService>();
 builder.Services.AddScoped<IFriendshipService, FriendshipService>();
+builder.Services.AddScoped<IInterestService, InterestService>();
 // Add other service registrations here as needed
 
 // =====================================
