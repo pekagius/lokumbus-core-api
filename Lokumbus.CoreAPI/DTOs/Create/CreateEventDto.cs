@@ -2,18 +2,13 @@ using System;
 using System.Collections.Generic;
 using Lokumbus.CoreAPI.Models.ValueObjects;
 
-namespace Lokumbus.CoreAPI.DTOs
+namespace Lokumbus.CoreAPI.DTOs.Create
 {
     /// <summary>
-    /// Data Transfer Object representing an Event.
+    /// Data Transfer Object for creating a new Event.
     /// </summary>
-    public class EventDto
+    public class CreateEventDto
     {
-        /// <summary>
-        /// The unique identifier of the Event.
-        /// </summary>
-        public string Id { get; set; }
-
         /// <summary>
         /// The title of the Event.
         /// </summary>
@@ -65,34 +60,24 @@ namespace Lokumbus.CoreAPI.DTOs
         public string? OrganizerId { get; set; }
 
         /// <summary>
-        /// The collection of Calendars associated with the Event.
+        /// The collection of Calendar IDs associated with the Event.
         /// </summary>
         public ICollection<string>? CalendarIds { get; set; }
 
         /// <summary>
-        /// The collection of Attendees associated with the Event.
+        /// The collection of Attendee IDs associated with the Event.
         /// </summary>
         public ICollection<string>? AttendeeIds { get; set; }
 
         /// <summary>
-        /// The collection of Categories associated with the Event.
+        /// The collection of Category IDs associated with the Event.
         /// </summary>
         public ICollection<string>? CategoryIds { get; set; }
 
         /// <summary>
-        /// The collection of Interests associated with the Event.
+        /// The collection of Interest IDs associated with the Event.
         /// </summary>
         public ICollection<string>? InterestIds { get; set; }
-
-        /// <summary>
-        /// The date and time when the Event was created.
-        /// </summary>
-        public DateTime? CreatedAt { get; set; }
-
-        /// <summary>
-        /// The date and time when the Event was last updated.
-        /// </summary>
-        public DateTime? UpdatedAt { get; set; }
 
         /// <summary>
         /// Indicates whether the Event is public.
@@ -150,22 +135,22 @@ namespace Lokumbus.CoreAPI.DTOs
         public string? Slug { get; set; }
 
         /// <summary>
-        /// The collection of Tickets associated with the Event.
+        /// The collection of Ticket IDs associated with the Event.
         /// </summary>
         public ICollection<string>? TicketIds { get; set; }
 
         /// <summary>
-        /// The collection of Sponsorships associated with the Event.
+        /// The collection of Sponsorship IDs associated with the Event.
         /// </summary>
         public ICollection<string>? SponsorshipIds { get; set; }
 
         /// <summary>
-        /// The collection of Discounts associated with the Event.
+        /// The collection of Discount IDs associated with the Event.
         /// </summary>
         public ICollection<string>? DiscountIds { get; set; }
 
         /// <summary>
-        /// The collection of Invites associated with the Event.
+        /// The collection of Invite IDs associated with the Event.
         /// </summary>
         public ICollection<string>? InviteIds { get; set; }
 

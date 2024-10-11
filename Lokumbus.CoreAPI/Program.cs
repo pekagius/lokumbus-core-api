@@ -3,6 +3,7 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Lokumbus.CoreAPI.Configuration.Bootstrapping;
 using Lokumbus.CoreAPI.Configuration.Mapping;
+using Lokumbus.CoreAPI.Configuration.Mapping.Converters;
 using Lokumbus.CoreAPI.Configuration.Validators;
 using Lokumbus.CoreAPI.Configuration.Validators.Auth;
 using Lokumbus.CoreAPI.Configuration.Validators.Create;
@@ -11,6 +12,7 @@ using Lokumbus.CoreAPI.Repositories.Interfaces;
 using Lokumbus.CoreAPI.Services;
 using Lokumbus.CoreAPI.Services.Interfaces;
 using Mapster;
+using MapsterMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
@@ -66,6 +68,12 @@ builder.Services.AddScoped<IAreaRepository, AreaRepository>();
 builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
 builder.Services.AddScoped<IAlertRepository, AlertRepository>();
 builder.Services.AddScoped<ICalendarRepository, CalendarRepository>();
+builder.Services.AddScoped<IEventRepository, EventRepository>();
+builder.Services.AddScoped<ICalendarEventAttendeeRepository, CalendarEventAttendeeRepository>();
+builder.Services.AddScoped<IAlertMessageRepository, AlertMessageRepository>();
+builder.Services.AddScoped<IChatMessageRepository, ChatMessageRepository>();
+builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();
+builder.Services.AddScoped<IFriendshipRepository, FriendshipRepository>();
 // Add other repository registrations here as needed
 
 // =====================================
@@ -82,6 +90,12 @@ builder.Services.AddScoped<IAreaService, AreaService>();
 builder.Services.AddScoped<IActivityService, ActivityService>();
 builder.Services.AddScoped<IAlertService, AlertService>();
 builder.Services.AddScoped<ICalendarService, CalendarService>();
+builder.Services.AddScoped<IEventService, EventService>();
+builder.Services.AddScoped<ICalendarEventAttendeeService, CalendarEventAttendeeService>();
+builder.Services.AddScoped<IAlertMessageService, AlertMessageService>();
+builder.Services.AddScoped<IChatMessageService, ChatMessageService>();
+builder.Services.AddScoped<IDiscountService, DiscountService>();
+builder.Services.AddScoped<IFriendshipService, FriendshipService>();
 // Add other service registrations here as needed
 
 // =====================================
@@ -100,9 +114,12 @@ builder.Services.AddValidatorsFromAssemblyContaining<CreateCalendarDtoValidator>
 // =====================================
 
 // Configure Mapster with the MappingProfile
-var config = TypeAdapterConfig.GlobalSettings;
+var config = new TypeAdapterConfig();
+config.Scan(typeof(DictionaryStringObjectConverter).Assembly);
+config.Apply(new DictionaryStringObjectConverter());
 MapsterConfiguration.RegisterMappings(config);
 builder.Services.AddSingleton(config);
+
 
 
 // =====================================

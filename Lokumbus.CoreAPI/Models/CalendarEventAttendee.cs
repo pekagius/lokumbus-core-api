@@ -19,5 +19,9 @@ namespace Lokumbus.CoreAPI.Models
         // Optionale Navigationseigenschaft – kann bei Bedarf verwendet werden
         [BsonIgnore]
         public Event? CalendarEvent { get; set; }
+
+        public DateTime UpdatedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public bool IsActive { get; set; }
     }
 }
