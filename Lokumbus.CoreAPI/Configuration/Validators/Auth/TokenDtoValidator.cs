@@ -1,8 +1,7 @@
 using FluentValidation;
-using Lokumbus.CoreAPI.DTOs;
 using Lokumbus.CoreAPI.DTOs.Auth;
 
-namespace Lokumbus.CoreAPI.Configuration.Validators
+namespace Lokumbus.CoreAPI.Configuration.Validators.Auth
 {
     /// <summary>
     /// Validator für TokenDto.

@@ -1,11 +1,9 @@
-using System.Reflection;
-using Lokumbus.CoreAPI.Configuration.Mapping.Converters;
 using Lokumbus.CoreAPI.DTOs;
 using Lokumbus.CoreAPI.DTOs.Create;
 using Lokumbus.CoreAPI.DTOs.Update;
 using Lokumbus.CoreAPI.Models;
 using Mapster;
-using Mapster.Utils;
+
 
 namespace Lokumbus.CoreAPI.Configuration.Mapping
 {
@@ -25,7 +23,7 @@ namespace Lokumbus.CoreAPI.Configuration.Mapping
                 .Map(dest => dest.CreatedAt, src => DateTime.UtcNow)
                 .Map(dest => dest.IsActive, src => true)
                 .Map(dest => dest.IsVerified, src => false)
-                .Map(dest => dest.PasswordHash, src => src.Password); // Setze Passwort-Hash
+                .Map(dest => dest.PasswordHash, src => src.Password); 
 
             // Mapping von UpdateAppUserDto zu AppUser
             config.NewConfig<UpdateAppUserDto, AppUser>()
@@ -105,6 +103,50 @@ namespace Lokumbus.CoreAPI.Configuration.Mapping
 
             // Mapping von Auth zu AuthDto
             config.NewConfig<Auth, AuthDto>();
+            
+            // Mapping von CreateActivityDto zu Activity
+            config.NewConfig<CreateActivityDto, Activity>()
+                .Map(dest => dest.CreatedAt, src => DateTime.UtcNow)
+                .Map(dest => dest.IsActive, src => true);
+
+            // Mapping von UpdateActivityDto zu Activity
+            config.NewConfig<UpdateActivityDto, Activity>()
+                .Map(dest => dest.UpdatedAt, src => DateTime.UtcNow)
+                .Ignore(dest => dest.Id)
+                .Ignore(dest => dest.CreatedAt);
+
+            // Mapping von Activity zu ActivityDto
+            config.NewConfig<Activity, ActivityDto>();
+            
+            // Mapping von CreateAlertDto zu Alert
+            config.NewConfig<CreateAlertDto, Alert>()
+                .Map(dest => dest.CreatedAt, src => DateTime.UtcNow)
+                .Map(dest => dest.IsDismissed, src => false);
+
+            // Mapping von UpdateAlertDto zu Alert
+            config.NewConfig<UpdateAlertDto, Alert>()
+                .Map(dest => dest.UpdatedAt, src => DateTime.UtcNow)
+                .Ignore(dest => dest.Id)
+                .Ignore(dest => dest.CreatedAt);
+
+            // Mapping von Alert zu AlertDto
+            config.NewConfig<Alert, AlertDto>();
+            
+            // Mapping von UpdateCalendarDto zu Calendar
+            config.NewConfig<CreateCalendarDto, Calendar>()
+                .Map(dest => dest.CreatedAt, src => DateTime.UtcNow)
+                .Map(dest => dest.UpdatedAt, src => DateTime.UtcNow);
+            
+            // Mapping von UpdateCalendarDto zu Calendar
+            config.NewConfig<UpdateCalendarDto, Calendar>()
+                .Map(dest => dest.UpdatedAt, src => DateTime.UtcNow)
+                .Ignore(dest => dest.Id)
+                .Ignore(dest => dest.CreatedAt);
+
+            // Mapping von Calendar zu CalendarDto
+            config.NewConfig<Calendar, CalendarDto>();
+
+
         }
     }
 }

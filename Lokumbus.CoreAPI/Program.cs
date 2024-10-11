@@ -63,6 +63,9 @@ builder.Services.AddScoped<ILocationRepository, LocationRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IAreaRepository, AreaRepository>();
+builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
+builder.Services.AddScoped<IAlertRepository, AlertRepository>();
+builder.Services.AddScoped<ICalendarRepository, CalendarRepository>();
 // Add other repository registrations here as needed
 
 // =====================================
@@ -76,6 +79,9 @@ builder.Services.AddScoped<ILocationService, LocationService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAreaService, AreaService>();
+builder.Services.AddScoped<IActivityService, ActivityService>();
+builder.Services.AddScoped<IAlertService, AlertService>();
+builder.Services.AddScoped<ICalendarService, CalendarService>();
 // Add other service registrations here as needed
 
 // =====================================
@@ -86,6 +92,9 @@ builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateAuthDtoValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<LoginDtoValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<TokenDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateAlertDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateCalendarDtoValidator>();
+
 // =====================================
 // Mapster Configuration
 // =====================================

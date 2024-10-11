@@ -1,20 +1,15 @@
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-
-namespace Lokumbus.CoreAPI.Models
+namespace Lokumbus.CoreAPI.DTOs.Create
 {
-    public class Alert
+    /// <summary>
+    /// Data Transfer Object for creating a new Alert.
+    /// </summary>
+    public class CreateAlertDto
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
         public string? Title { get; set; }
         public string? Message { get; set; }
         public string? Type { get; set; }
         public string? Level { get; set; }
         public DateTime? Timestamp { get; set; }
-        public bool? IsRead { get; set; }
-        public bool? IsDismissed { get; set; }
         public string[]? Tags { get; set; }
         public string? TargetUserId { get; set; }
         public string? TargetGroupId { get; set; }
@@ -34,7 +29,5 @@ namespace Lokumbus.CoreAPI.Models
         public string? IconUrl { get; set; }
         public string? Color { get; set; }
         public string? BackgroundColor { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
     }
 }

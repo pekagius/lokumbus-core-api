@@ -1,12 +1,10 @@
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-
-namespace Lokumbus.CoreAPI.Models
+namespace Lokumbus.CoreAPI.DTOs
 {
-    public class Alert
+    /// <summary>
+    /// Data Transfer Object representing an Alert.
+    /// </summary>
+    public class AlertDto
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
         public string? Title { get; set; }
         public string? Message { get; set; }
@@ -34,7 +32,5 @@ namespace Lokumbus.CoreAPI.Models
         public string? IconUrl { get; set; }
         public string? Color { get; set; }
         public string? BackgroundColor { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
     }
 }
