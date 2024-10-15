@@ -81,6 +81,7 @@ builder.Services.AddScoped<IOrganizerRepository, OrganizerRepository>();
 builder.Services.AddScoped<IReminderRepository, ReminderRepository>();
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 builder.Services.AddScoped<ISponsorshipRepository, SponsorshipRepository>();
+builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 
 // =====================================
 // Service Registration
@@ -109,6 +110,8 @@ builder.Services.AddScoped<IOrganizerService, OrganizerService>();
 builder.Services.AddScoped<IReminderService, ReminderService>();
 builder.Services.AddScoped<IReviewService, ReviewService>();
 builder.Services.AddScoped<ISponsorshipService, SponsorshipService>();
+builder.Services.AddScoped<ITicketService, TicketService>();
+
 // =====================================
 // FluentValidation Configuration
 // =====================================

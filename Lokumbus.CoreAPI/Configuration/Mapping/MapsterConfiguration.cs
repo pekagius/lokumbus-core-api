@@ -274,6 +274,17 @@ namespace Lokumbus.CoreAPI.Configuration.Mapping
                 .Ignore(dest => dest.CreatedAt);
             
             config.NewConfig<Sponsorship, SponsorshipDto>();
+            
+            config.NewConfig<CreateTicketDto, Ticket>()
+                .Map(dest => dest.CreatedAt, src => DateTime.UtcNow)
+                .Map(dest => dest.IsActive, src => true);
+
+            config.NewConfig<UpdateTicketDto, Ticket>()
+                .Map(dest => dest.UpdatedAt, src => DateTime.UtcNow)
+                .Ignore(dest => dest.Id)
+                .Ignore(dest => dest.CreatedAt);
+
+            config.NewConfig<Ticket, TicketDto>();
         }
     }
 }
