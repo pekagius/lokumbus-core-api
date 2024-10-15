@@ -11,5 +11,8 @@ namespace Lokumbus.CoreAPI.Models
         public string? Name { get; set; }
         public string? Description { get; set; }
         public decimal? Amount { get; set; }
+        public DateTime UpdatedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public bool IsActive { get; set; }
     }
 }

@@ -264,6 +264,16 @@ namespace Lokumbus.CoreAPI.Configuration.Mapping
                 .Ignore(dest => dest.Id);
             
             config.NewConfig<Review, ReviewDto>();
+            config.NewConfig<CreateSponsorshipDto, Sponsorship>()
+                .Map(dest => dest.CreatedAt, src => DateTime.UtcNow)
+                .Map(dest => dest.IsActive, src => true);
+
+            config.NewConfig<UpdateSponsorshipDto, Sponsorship>()
+                .Map(dest => dest.UpdatedAt, src => DateTime.UtcNow)
+                .Ignore(dest => dest.Id)
+                .Ignore(dest => dest.CreatedAt);
+            
+            config.NewConfig<Sponsorship, SponsorshipDto>();
         }
     }
 }

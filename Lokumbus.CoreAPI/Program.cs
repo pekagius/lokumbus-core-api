@@ -80,6 +80,7 @@ builder.Services.AddScoped<IInviteRepository, InviteRepository>();
 builder.Services.AddScoped<IOrganizerRepository, OrganizerRepository>();
 builder.Services.AddScoped<IReminderRepository, ReminderRepository>();
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
+builder.Services.AddScoped<ISponsorshipRepository, SponsorshipRepository>();
 
 // =====================================
 // Service Registration
@@ -107,6 +108,7 @@ builder.Services.AddScoped<IInviteService, InviteService>();
 builder.Services.AddScoped<IOrganizerService, OrganizerService>();
 builder.Services.AddScoped<IReminderService, ReminderService>();
 builder.Services.AddScoped<IReviewService, ReviewService>();
+builder.Services.AddScoped<ISponsorshipService, SponsorshipService>();
 // =====================================
 // FluentValidation Configuration
 // =====================================
