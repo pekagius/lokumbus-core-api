@@ -78,7 +78,8 @@ builder.Services.AddScoped<IInterestRepository, InterestRepository>();
 builder.Services.AddScoped<IInterestRelationRepository, InterestRelationRepository>();
 builder.Services.AddScoped<IInviteRepository, InviteRepository>();
 builder.Services.AddScoped<IOrganizerRepository, OrganizerRepository>();
-// Add other repository registrations here as needed
+builder.Services.AddScoped<IReminderRepository, ReminderRepository>();
+builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 
 // =====================================
 // Service Registration
@@ -104,8 +105,8 @@ builder.Services.AddScoped<IInterestService, InterestService>();
 builder.Services.AddScoped<IInterestRelationService, InterestRelationService>();
 builder.Services.AddScoped<IInviteService, InviteService>();
 builder.Services.AddScoped<IOrganizerService, OrganizerService>();
-// Add other service registrations here as needed
-
+builder.Services.AddScoped<IReminderService, ReminderService>();
+builder.Services.AddScoped<IReviewService, ReviewService>();
 // =====================================
 // FluentValidation Configuration
 // =====================================

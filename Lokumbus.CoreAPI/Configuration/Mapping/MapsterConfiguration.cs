@@ -244,6 +244,26 @@ namespace Lokumbus.CoreAPI.Configuration.Mapping
                 .Ignore(dest => dest.CreatedAt);
             
             config.NewConfig<Organizer, OrganizerDto>();
+            
+            config.NewConfig<CreateReminderDto, Reminder>()
+                .Map(dest => dest.CreatedAt, src => DateTime.UtcNow)
+                .Map(dest => dest.IsActive, src => true);
+            
+            config.NewConfig<UpdateReminderDto, Reminder>()
+                .Map(dest => dest.UpdatedAt, src => DateTime.UtcNow)
+                .Ignore(dest => dest.Id);
+            
+            config.NewConfig<Reminder, ReminderDto>();
+            
+            config.NewConfig<CreateReviewDto, Review>()
+                .Map(dest => dest.CreatedAt, src => DateTime.UtcNow)
+                .Map(dest => dest.IsActive, src => true);
+            
+            config.NewConfig<UpdateReviewDto, Review>()
+                .Map(dest => dest.UpdatedAt, src => DateTime.UtcNow)
+                .Ignore(dest => dest.Id);
+            
+            config.NewConfig<Review, ReviewDto>();
         }
     }
 }

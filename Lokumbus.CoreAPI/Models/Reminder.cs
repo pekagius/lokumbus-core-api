@@ -11,5 +11,8 @@ namespace Lokumbus.CoreAPI.Models
         public int? Minutes { get; set; }
         public int? Hours { get; set; }
         public int? Days { get; set; }
+        public DateTime UpdatedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public bool IsActive { get; set; }
     }
 }

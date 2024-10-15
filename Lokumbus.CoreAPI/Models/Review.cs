@@ -17,5 +17,6 @@ namespace Lokumbus.CoreAPI.Models
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public Dictionary<string, object>? Metadata { get; set; }
+        public bool IsActive { get; set; }
     }
 }
