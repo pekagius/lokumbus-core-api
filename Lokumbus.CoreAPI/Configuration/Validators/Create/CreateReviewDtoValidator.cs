@@ -1,7 +1,7 @@
 using FluentValidation;
 using Lokumbus.CoreAPI.DTOs.Create;
 
-namespace Lokumbus.CoreAPI.Configuration.Validators;
+namespace Lokumbus.CoreAPI.Configuration.Validators.Create;
 
 /// <summary>
 /// Validator für <see cref="CreateReviewDto"/> unter Verwendung von FluentValidation.

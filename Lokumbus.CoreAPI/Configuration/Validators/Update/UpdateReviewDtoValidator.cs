@@ -1,7 +1,7 @@
 using FluentValidation;
 using Lokumbus.CoreAPI.DTOs.Update;
 
-namespace Lokumbus.CoreAPI.Configuration.Validators;
+namespace Lokumbus.CoreAPI.Configuration.Validators.Update;
 
 /// <summary>
 /// Validator für <see cref="UpdateReviewDto"/> unter Verwendung von FluentValidation.
