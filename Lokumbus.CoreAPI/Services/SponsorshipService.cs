@@ -38,9 +38,9 @@ namespace Lokumbus.CoreAPI.Services
             };
             _kafkaProducer = new ProducerBuilder<Null, string>(producerConfig).Build();
 
-            // Retrieve Kafka topic from configuration
-            var topics = configuration.GetSection("KafkaSettings").GetSection("Topics").Get<string[]>();
-            _kafkaTopic = topics != null && topics.Length > 0 ? topics[0] : throw new ArgumentException("Kafka topic is not configured.");
+            // Retrieve Kafka topic for ActivityService from configuration
+            _kafkaTopic = configuration.GetSection("KafkaSettings").GetValue<string>("SponsorshipTopic") 
+                          ?? throw new ArgumentException("Kafka topic for ActivityService is not configured.");
         }
 
         /// <inheritdoc />
