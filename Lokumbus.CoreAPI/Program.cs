@@ -2,9 +2,9 @@ using System.Reflection;
 using System.Text;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Lokumbus.CoreAPI.Configuration;
 using Lokumbus.CoreAPI.Configuration.Bootstrapping;
 using Lokumbus.CoreAPI.Configuration.Mapster;
-using Lokumbus.CoreAPI.Configuration.Validators;
 using Lokumbus.CoreAPI.Configuration.Validators.Auth;
 using Lokumbus.CoreAPI.Configuration.Validators.Create;
 using Lokumbus.CoreAPI.Repositories;
@@ -12,32 +12,15 @@ using Lokumbus.CoreAPI.Repositories.Interfaces;
 using Lokumbus.CoreAPI.Services;
 using Lokumbus.CoreAPI.Services.Interfaces;
 using Mapster;
-using MapsterMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
 
-// Create a builder for the WebApplication
 var builder = WebApplication.CreateBuilder(args);
 
-// =====================================
-// Logging Configuration
-// =====================================
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 
-// =====================================
-// Configuration Settings
-// =====================================
-
-// The existing appsettings.json already contains MongoDbSettings and KafkaSettings.
-// These will be accessed via the configuration system.
-
-// =====================================
-// MongoDB Configuration
-// =====================================
-
-// Register MongoClient as a singleton
 builder.Services.AddSingleton<IMongoClient, MongoClient>(_ =>
 {
     var mongoSettings = builder.Configuration.GetSection("MongoDbSettings");
@@ -45,7 +28,6 @@ builder.Services.AddSingleton<IMongoClient, MongoClient>(_ =>
     return new MongoClient(connectionString);
 });
 
-// Register IMongoDatabase as a singleton
 builder.Services.AddSingleton<IMongoDatabase>(sp =>
 {
     var mongoSettings = builder.Configuration.GetSection("MongoDbSettings");
@@ -53,10 +35,6 @@ builder.Services.AddSingleton<IMongoDatabase>(sp =>
     var client = sp.GetRequiredService<IMongoClient>();
     return client.GetDatabase(databaseName);
 });
-
-// =====================================
-// Repository Registration
-// =====================================
 
 // Register all repositories
 builder.Services.AddScoped<IAppUserRepository, AppUserRepository>();
@@ -83,10 +61,6 @@ builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 builder.Services.AddScoped<ISponsorshipRepository, SponsorshipRepository>();
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 
-// =====================================
-// Service Registration
-// =====================================
-
 // Register all services
 builder.Services.AddScoped<IAppUserService, AppUserService>();
 builder.Services.AddScoped<IPersonaService, PersonaService>();
@@ -112,10 +86,6 @@ builder.Services.AddScoped<IReviewService, ReviewService>();
 builder.Services.AddScoped<ISponsorshipService, SponsorshipService>();
 builder.Services.AddScoped<ITicketService, TicketService>();
 
-// =====================================
-// FluentValidation Configuration
-// =====================================
-
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateAuthDtoValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<LoginDtoValidator>();
@@ -123,21 +93,12 @@ builder.Services.AddValidatorsFromAssemblyContaining<TokenDtoValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateAlertDtoValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateCalendarDtoValidator>();
 
-// =====================================
-// Mapster Configuration
-// =====================================
-
 // Configure Mapster with the MappingProfile
 TypeAdapterConfig.GlobalSettings.Scan(Assembly.GetExecutingAssembly());
 MappingRegistrar.RegisterMappings();
 builder.Services.AddSingleton(TypeAdapterConfig.GlobalSettings);
 
-
-
-// =====================================
 // JWT Authentication Configuration
-// =====================================
-
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var secretKey = jwtSettings.GetValue<string>("SecretKey");
 
@@ -163,21 +124,10 @@ builder.Services.AddAuthentication(options =>
         };
     });
 
-
-// =====================================
-// Controllers
-// =====================================
-
 builder.Services.AddControllers();
-
-// =====================================
-// Swagger/OpenAPI Configuration
-// =====================================
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
-    // JWT-Token in Swagger integrieren
     options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
     {
         Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"",
@@ -204,12 +154,6 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-// =====================================
-// CORS Configuration (Optional)
-// =====================================
-
-// If your API needs to be accessed from different origins, configure CORS here.
-// Example: Allow all origins (not recommended for production)
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll",
@@ -221,23 +165,10 @@ builder.Services.AddCors(options =>
         });
 });
 
-// =====================================
-// Hosted Services (Optional)
-// =====================================
-
-// Beispiel: Hosted Service für Kafka-Topic-Bootstrap
+builder.Services.Configure<KafkaSettings>(builder.Configuration.GetSection("KafkaSettings"));
 builder.Services.AddHostedService<BootstrapKafka>();
 
-// =====================================
-// Build the Application
-// =====================================
-
 var app = builder.Build();
-
-// =====================================
-// Configure the HTTP Request Pipeline
-// =====================================
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

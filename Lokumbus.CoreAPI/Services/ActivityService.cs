@@ -11,7 +11,7 @@ using System.Text.Json;
 namespace Lokumbus.CoreAPI.Services
 {
     /// <summary>
-    /// Implements the IActivityService interface für Activity business logic.
+    /// Implements the IActivityService interface for Activity business logic.
     /// </summary>
     public class ActivityService : IActivityService
     {
@@ -38,9 +38,9 @@ namespace Lokumbus.CoreAPI.Services
             };
             _kafkaProducer = new ProducerBuilder<Null, string>(producerConfig).Build();
 
-            // Retrieve Kafka topic from configuration
-            var topics = configuration.GetSection("KafkaSettings:Topics").Get<string[]>();
-            _kafkaTopic = topics != null && topics.Length > 0 ? topics[0] : throw new ArgumentException("Kafka topic is not configured.");
+            // Retrieve Kafka topic for ActivityService from configuration
+            _kafkaTopic = configuration.GetSection("KafkaSettings").GetValue<string>("ActivityTopic") 
+                          ?? throw new ArgumentException("Kafka topic for ActivityService is not configured.");
         }
 
         /// <inheritdoc />
@@ -68,7 +68,7 @@ namespace Lokumbus.CoreAPI.Services
             // Map DTO to domain model
             var activity = createDto.Adapt<Activity>(_mapConfig);
 
-            // Set creation timestamp und Standardwerte
+            // Set creation timestamp and default values
             activity.CreatedAt = DateTime.UtcNow;
             activity.IsActive = true;
 
@@ -100,8 +100,8 @@ namespace Lokumbus.CoreAPI.Services
             // Update the activity in the repository
             await _activityRepository.UpdateAsync(existingActivity);
 
-            // Optional: Beziehung zur Event-Modell prüfen oder herstellen
-            // Beispiel: Wenn Activity mit Event verknüpft ist, kann hier die Beziehung aktualisiert werden
+            // Optional: Check or update relationship to Event model
+            // Example: If Activity is linked to an Event, update the relationship here
 
             // Publish update event to Kafka
             var activityDto = existingActivity.Adapt<ActivityDto>(_mapConfig);
