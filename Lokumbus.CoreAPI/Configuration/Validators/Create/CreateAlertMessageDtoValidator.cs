@@ -16,12 +16,6 @@ namespace Lokumbus.CoreAPI.Configuration.Validators.Create
             RuleFor(x => x.Content)
                 .NotEmpty().WithMessage("Content is required.")
                 .MaximumLength(1000).WithMessage("Content must not exceed 1000 characters.");
-
-            RuleFor(x => x.SystemId)
-                .Matches("^[a-fA-F0-9]{24}$").WithMessage("SystemId must be a valid ObjectId.")
-                .When(x => !string.IsNullOrEmpty(x.SystemId));
-
-// Weitere Validierungen können hier hinzugefügt werden.
         }
     }
 }

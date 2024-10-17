@@ -1,9 +1,9 @@
+using System.Reflection;
 using System.Text;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Lokumbus.CoreAPI.Configuration.Bootstrapping;
-using Lokumbus.CoreAPI.Configuration.Mapping;
-using Lokumbus.CoreAPI.Configuration.Mapping.Converters;
+using Lokumbus.CoreAPI.Configuration.Mapster;
 using Lokumbus.CoreAPI.Configuration.Validators;
 using Lokumbus.CoreAPI.Configuration.Validators.Auth;
 using Lokumbus.CoreAPI.Configuration.Validators.Create;
@@ -128,11 +128,9 @@ builder.Services.AddValidatorsFromAssemblyContaining<CreateCalendarDtoValidator>
 // =====================================
 
 // Configure Mapster with the MappingProfile
-var config = new TypeAdapterConfig();
-config.Scan(typeof(DictionaryStringObjectConverter).Assembly);
-config.Apply(new DictionaryStringObjectConverter());
-MapsterConfiguration.RegisterMappings(config);
-builder.Services.AddSingleton(config);
+TypeAdapterConfig.GlobalSettings.Scan(Assembly.GetExecutingAssembly());
+MappingRegistrar.RegisterMappings();
+builder.Services.AddSingleton(TypeAdapterConfig.GlobalSettings);
 
 
 

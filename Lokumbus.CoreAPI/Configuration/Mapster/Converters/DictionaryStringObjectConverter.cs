@@ -2,7 +2,7 @@ using System.Text.Json;
 using Mapster;
 using MongoDB.Bson;
 
-namespace Lokumbus.CoreAPI.Configuration.Mapping.Converters
+namespace Lokumbus.CoreAPI.Configuration.Mapster.Converters
 {
     public class DictionaryStringObjectConverter : IRegister
     {
@@ -20,6 +20,9 @@ namespace Lokumbus.CoreAPI.Configuration.Mapping.Converters
 
         private static Dictionary<string, object> ConvertMetadata(Dictionary<string, object> source)
         {
+            if (source == null)
+                return null;
+
             return source.ToDictionary(
                 keyValuePair => keyValuePair.Key,
                 keyValuePair => ConvertValue(keyValuePair.Value));
@@ -55,6 +58,9 @@ namespace Lokumbus.CoreAPI.Configuration.Mapping.Converters
 
         private static BsonDocument ConvertToBsonDocument(Dictionary<string, object> source)
         {
+            if (source == null)
+                return null;
+
             return new BsonDocument(source.ToDictionary(kvp => kvp.Key, kvp => ConvertToBsonValue(kvp.Value)));
         }
 
@@ -63,8 +69,8 @@ namespace Lokumbus.CoreAPI.Configuration.Mapping.Converters
             return value switch
             {
                 Dictionary<string, object> dictionary => ConvertToBsonDocument(dictionary),
-                List<object> list => new BsonArray(list.Select(ConvertToBsonValue)),
-                string str => new BsonString(str),
+                List<object> list => list == null ? BsonNull.Value : new BsonArray(list.Select(ConvertToBsonValue)),
+                string str => str == null ? BsonNull.Value : new BsonString(str),
                 int intVal => new BsonInt32(intVal),
                 long longVal => new BsonInt64(longVal),
                 double doubleVal => new BsonDouble(doubleVal),
@@ -75,5 +81,3 @@ namespace Lokumbus.CoreAPI.Configuration.Mapping.Converters
         }
     }
 }
-
-// Todo: Wir müssen den converter noch so anpassen, dass er bei Null-Values den BSON-Null-Wert verwendet, damit die Datenbank keine Fehler ausgibt.
