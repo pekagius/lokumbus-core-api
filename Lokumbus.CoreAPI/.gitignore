@@ -1,0 +1,43 @@
+# Visual Studio und .NET
+.vs/
+.vscode/
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# NuGet
+*.nupkg
+.nuget/
+packages/
+
+# Build-Ergebnisse
+*.exe
+*.dll
+*.pdb
+*.cache
+*.config
+*.log
+
+# OS-spezifische Dateien
+.DS_Store
+Icon?
+ehthumbs.db
+Thumbs.db
+
+# DotNet tools
+*.dotCover
+*.ncrunchproject
+*.sln.ide
+_ReSharper*/
+*.resharper
+*_ReSharper*/
+
+# GitHub Container Registry und Docker
+docker-compose.override.yml
+
+# Secrets (unverschlüsselte Dateien, die nicht ins Repository gehören)
+k8s/secrets/mongodb-secret.yaml
+k8s/secrets/jwt-secret.yaml
