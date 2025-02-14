@@ -12,6 +12,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: List repository contents for debugging
+        run: |
+          echo "Listing repository root contents:"
+          ls -la
+          echo "Listing contents of Lokumbus.CoreAPI folder:"
+          ls -la Lokumbus.CoreAPI
+          echo "Checking for Dockerfile in Lokumbus.CoreAPI:"
+          ls -la Lokumbus.CoreAPI/Dockerfile
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
@@ -31,6 +40,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
-          context: .
+          context: Lokumbus.CoreAPI
+          file: Dockerfile
           push: true
           tags: ghcr.io/pekagius/lokumbus.coreapi:latest
