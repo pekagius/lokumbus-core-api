@@ -51,11 +51,11 @@ namespace Lokumbus.CoreAPI.DTOs
         /// <summary>
         /// Attachments associated with the AlertMessage.
         /// </summary>
-        public ICollection<Attachment>? Attachments { get; set; }
+        public List<Attachment>? Attachments { get; set; }
 
         /// <summary>
         /// Additional metadata associated with the AlertMessage.
         /// </summary>
-        public Dictionary<string, object>? Metadata { get; set; }
+        public List<MetaEntry>? Metadata { get; set; }
     }
 }

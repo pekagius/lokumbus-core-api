@@ -38,7 +38,7 @@ namespace Lokumbus.CoreAPI.DTOs.Update
         /// <summary>
         /// Additional metadata associated with the ChatMessage.
         /// </summary>
-        public Dictionary<string, object>? Metadata { get; set; }
+        public List<MetaEntry>? Metadata { get; set; }
 
         /// <summary>
         /// The collection of channels through which the Message is sent.

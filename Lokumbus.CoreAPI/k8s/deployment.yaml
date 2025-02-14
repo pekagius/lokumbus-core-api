@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lokumbus-core-api
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lokumbus-coreapi
+  template:
+    metadata:
+      labels:
+        app: lokumbus-coreapi
+    spec:
+      containers:
+        - name: lokumbus-coreapi
+          image: <YOUR_REGISTRY>/lokumbus.coreapi:latest
+          ports:
+            - containerPort: 5000
+          env:
+            - name: MONGODB_CONNECTION_STRING
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: ConnectionString
+            - name: MONGODB_DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: DatabaseName
+            - name: JWT_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: SecretKey

@@ -1,3 +1,5 @@
+using Lokumbus.CoreAPI.Models.ValueObjects;
+
 namespace Lokumbus.CoreAPI.DTOs.Create
 {
     /// <summary>
@@ -23,6 +25,6 @@ namespace Lokumbus.CoreAPI.DTOs.Create
         /// <summary>
         /// Additional metadata associated with the Sponsorship.
         /// </summary>
-        public string? Metadata { get; set; }
+        public List<MetaEntry>? Metadata { get; set; }
     }
 }

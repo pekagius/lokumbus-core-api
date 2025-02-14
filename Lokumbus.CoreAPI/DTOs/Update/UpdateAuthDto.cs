@@ -1,4 +1,5 @@
 using System;
+using Lokumbus.CoreAPI.Models.ValueObjects;
 
 namespace Lokumbus.CoreAPI.DTOs.Update
 {
@@ -80,6 +81,6 @@ namespace Lokumbus.CoreAPI.DTOs.Update
         /// <summary>
         /// Metadata associated with the Auth entry.
         /// </summary>
-        public Dictionary<string, object>? Metadata { get; set; }
+        public List<MetaEntry>? Metadata { get; set; }
     }
 }

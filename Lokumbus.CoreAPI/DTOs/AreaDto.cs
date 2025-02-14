@@ -21,7 +21,7 @@ public class AreaDto
     public string? TimeZone { get; set; }
     public string? ImageUrl { get; set; }
     public List<string>? Tags { get; set; }
-    public Dictionary<string, object>? Metadata { get; set; }
+    public List<MetaEntry>? Metadata { get; set; }
     public List<string>? RelatedLocationIds { get; set; }
     public List<string>? RelatedEventIds { get; set; }
 }

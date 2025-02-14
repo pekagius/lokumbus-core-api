@@ -1,4 +1,5 @@
 using Lokumbus.CoreAPI.Models.Enumerations;
+using Lokumbus.CoreAPI.Models.ValueObjects;
 
 namespace Lokumbus.CoreAPI.DTOs
 {
@@ -17,6 +18,6 @@ namespace Lokumbus.CoreAPI.DTOs
         public bool IsPublic { get; set; }
         public string? TimeZone { get; set; }
         public IEnumerable<EventDto>? Events { get; set; }
-        public Dictionary<string, object>? Metadata { get; set; }
+        public List<MetaEntry>? Metadata { get; set; }
     }
 }

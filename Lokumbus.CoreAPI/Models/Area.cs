@@ -88,7 +88,7 @@ namespace Lokumbus.CoreAPI.Models
         /// <summary>
         /// Additional metadata associated with the Area.
         /// </summary>
-        public Dictionary<string, object>? Metadata { get; set; }
+        public List<MetaEntry>? Metadata { get; set; }
 
         /// <summary>
         /// The identifiers of the related Locations.

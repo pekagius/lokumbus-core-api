@@ -48,6 +48,6 @@ namespace Lokumbus.CoreAPI.DTOs.Create
         /// <summary>
         /// Additional metadata associated with the ChatMessage.
         /// </summary>
-        public Dictionary<string, object>? Metadata { get; set; } = new Dictionary<string, object>();
+        public List<MetaEntry>? Metadata { get; set; }
     }
 }

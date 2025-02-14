@@ -2,6 +2,7 @@ using Lokumbus.CoreAPI.DTOs;
 using Lokumbus.CoreAPI.DTOs.Create;
 using Lokumbus.CoreAPI.DTOs.Update;
 using Lokumbus.CoreAPI.Models;
+using Lokumbus.CoreAPI.Models.ValueObjects;
 using Mapster;
 
 namespace Lokumbus.CoreAPI.Configuration.Mapster.EntityMapping
@@ -14,7 +15,7 @@ namespace Lokumbus.CoreAPI.Configuration.Mapster.EntityMapping
                 .Map(dest => dest.CreatedAt, src => DateTime.UtcNow)
                 .Map(dest => dest.UpdatedAt, src => DateTime.UtcNow)
                 .Map(dest => dest.IsAccepted, src => false)
-                .Map(dest => dest.Metadata, src => new Dictionary<string, object>());
+                .Map(dest => dest.Metadata, src => new List<MetaEntry>());
 
             config.NewConfig<UpdateFriendshipDto, Friendship>()
                 .Map(dest => dest.UpdatedAt, src => DateTime.UtcNow)

@@ -1,4 +1,5 @@
 using Lokumbus.CoreAPI.Models.Enumerations;
+using Lokumbus.CoreAPI.Models.ValueObjects;
 
 namespace Lokumbus.CoreAPI.DTOs.Create
 {
@@ -40,6 +41,6 @@ namespace Lokumbus.CoreAPI.DTOs.Create
         /// <summary>
         /// Zusätzliche Metadaten für den Kalender.
         /// </summary>
-        public Dictionary<string, object>? Metadata { get; set; }
+        public List<MetaEntry>? Metadata { get; set; }
     }
 }

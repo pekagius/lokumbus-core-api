@@ -1,3 +1,5 @@
+using Lokumbus.CoreAPI.Models.ValueObjects;
+
 namespace Lokumbus.CoreAPI.DTOs.Update
 {
     /// <summary>
@@ -38,6 +40,6 @@ namespace Lokumbus.CoreAPI.DTOs.Update
         /// <summary>
         /// Updated metadata associated with the Interest.
         /// </summary>
-        public Dictionary<string, object>? Metadata { get; set; }
+        public List<MetaEntry>? Metadata { get; set; }
     }
 }

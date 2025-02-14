@@ -82,6 +82,6 @@ namespace Lokumbus.CoreAPI.DTOs
         /// <summary>
         /// Additional metadata associated with the Message.
         /// </summary>
-        public Dictionary<string, object>? Metadata { get; set; }
+        public List<MetaEntry>? Metadata { get; set; }
     }
 }

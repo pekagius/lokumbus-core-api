@@ -49,7 +49,7 @@ public class CreateLocationDto
     /// <summary>
     /// Additional metadata associated with the Location.
     /// </summary>
-    public Dictionary<string, object>? Metadata { get; set; }
+    public List<MetaEntry>? Metadata { get; set; }
 
     /// <summary>
     /// List of Restriction IDs associated with the Location.
@@ -64,7 +64,7 @@ public class CreateLocationDto
     /// <summary>
     /// Dictionary indicating the suitability of the Location for various purposes.
     /// </summary>
-    public Dictionary<string, bool>? Suitabilities { get; set; }
+    public List<SuitabilityEntry>? Suitabilities { get; set; }
 
     /// <summary>
     /// The allowed age range for the Location.

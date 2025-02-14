@@ -1,18 +1,24 @@
+using JetBrains.Annotations;
+using Lokumbus.CoreAPI.Models.ValueObjects;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace Lokumbus.CoreAPI.Models
 {
-    public class Activity
+    [UsedImplicitly]
+    public class Activity(string id)
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
+        public string Id { get; set; } = id;
+
         public string? Name { get; set; }
         public string? Description { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
-        public TimeSpan? Duration { get; set; }
+        
+        public int? DurationMinutes { get; set; }
+
         public Location? Location { get; set; }
         public string? MaxParticipants { get; set; }
         public string? MinParticipants { get; set; }
@@ -48,5 +54,6 @@ namespace Lokumbus.CoreAPI.Models
         public bool? IsIndoor { get; set; }
         public string[]? Recommendations { get; set; }
         public string[]? Warnings { get; set; }
+        public List<MetaEntry>? Metadata { get; set; }
     }
 }

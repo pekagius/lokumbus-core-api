@@ -1,3 +1,4 @@
+using Lokumbus.CoreAPI.Models.ValueObjects;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -23,6 +24,6 @@ namespace Lokumbus.CoreAPI.Models
         public string? Slug { get; set; }
         public string? Popularity { get; set; }
         public ICollection<InterestRelation> RelatedInterests { get; set; } = new List<InterestRelation>();
-        public Dictionary<string, object>? Metadata { get; set; }
+        public List<MetaEntry>? Metadata { get; set; }
     }
 }

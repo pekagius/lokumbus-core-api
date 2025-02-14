@@ -1,3 +1,5 @@
+using Lokumbus.CoreAPI.Models.ValueObjects;
+
 namespace Lokumbus.CoreAPI.DTOs;
 
 /// <summary>
@@ -98,5 +100,5 @@ public class PersonaDto
     /// <summary>
     /// Metadata associated with the Persona.
     /// </summary>
-    public Dictionary<string, object>? Metadata { get; set; }
+    public List<MetaEntry>? Metadata { get; set; }
 }

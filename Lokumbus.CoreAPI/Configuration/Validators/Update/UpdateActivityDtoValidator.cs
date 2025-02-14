@@ -1,5 +1,6 @@
 using FluentValidation;
 using Lokumbus.CoreAPI.DTOs.Update;
+using System;
 
 namespace Lokumbus.CoreAPI.Configuration.Validators.Update
 {
@@ -15,54 +16,54 @@ namespace Lokumbus.CoreAPI.Configuration.Validators.Update
         {
             // Validierung des Namens
             RuleFor(x => x.Name)
-                .MaximumLength(100).WithMessage("Name must not exceed 100 characters.")
+                .MaximumLength(100).WithMessage("Name darf maximal 100 Zeichen lang sein.")
                 .When(x => !string.IsNullOrEmpty(x.Name));
 
             // Validierung der Beschreibung
             RuleFor(x => x.Description)
-                .MaximumLength(500).WithMessage("Description must not exceed 500 characters.")
+                .MaximumLength(500).WithMessage("Beschreibung darf maximal 500 Zeichen lang sein.")
                 .When(x => !string.IsNullOrEmpty(x.Description));
 
-            // Validierung der Start- und Enddaten
+            // Validierung des Start- und Enddatums
             RuleFor(x => x.StartDate)
-                .LessThanOrEqualTo(x => x.EndDate).WithMessage("StartDate must be before or equal to EndDate.")
+                .LessThanOrEqualTo(x => x.EndDate).WithMessage("StartDate muss vor oder gleich EndDate sein.")
                 .When(x => x.StartDate.HasValue && x.EndDate.HasValue);
 
             RuleFor(x => x.EndDate)
-                .GreaterThanOrEqualTo(x => x.StartDate).WithMessage("EndDate must be after or equal to StartDate.")
+                .GreaterThanOrEqualTo(x => x.StartDate).WithMessage("EndDate muss nach oder gleich StartDate sein.")
                 .When(x => x.StartDate.HasValue && x.EndDate.HasValue);
 
-            // Validierung der Dauer
-            RuleFor(x => x.Duration)
-                .GreaterThan(TimeSpan.Zero).WithMessage("Duration must be positive.")
-                .When(x => x.Duration.HasValue);
+            // Validierung der Dauer in Minuten
+            RuleFor(x => x.DurationMinutes)
+                .GreaterThan(0).WithMessage("DurationMinutes muss positiv sein.")
+                .When(x => x.DurationMinutes.HasValue);
 
             // Weitere Validierungen
             RuleFor(x => x.Price)
-                .GreaterThanOrEqualTo(0).WithMessage("Price must be a non-negative number.")
+                .GreaterThanOrEqualTo(0).WithMessage("Price muss eine nicht-negative Zahl sein.")
                 .When(x => x.Price.HasValue);
 
             RuleFor(x => x.Currency)
-                .MaximumLength(10).WithMessage("Currency must not exceed 10 characters.")
+                .MaximumLength(10).WithMessage("Currency darf maximal 10 Zeichen lang sein.")
                 .When(x => !string.IsNullOrEmpty(x.Currency));
 
             RuleFor(x => x.CategoryId)
-                .MaximumLength(24).WithMessage("CategoryId must not exceed 24 characters.")
+                .MaximumLength(24).WithMessage("CategoryId darf maximal 24 Zeichen lang sein.")
                 .When(x => !string.IsNullOrEmpty(x.CategoryId));
 
             // Validierung von Tags
             RuleFor(x => x.Tags)
                 .Must(tags => tags == null || tags.Length <= 10)
-                .WithMessage("Number of tags must not exceed 10.");
+                .WithMessage("Anzahl der Tags darf maximal 10 betragen.");
 
             // Validierung von URLs
             RuleFor(x => x.Url)
                 .Must(uri => string.IsNullOrEmpty(uri) || Uri.IsWellFormedUriString(uri, UriKind.Absolute))
-                .WithMessage("Url must be a valid URI.");
+                .WithMessage("Url muss eine gültige URI sein.");
 
             RuleFor(x => x.TicketUrl)
                 .Must(uri => string.IsNullOrEmpty(uri) || Uri.IsWellFormedUriString(uri, UriKind.Absolute))
-                .WithMessage("TicketUrl must be a valid URI.");
+                .WithMessage("TicketUrl muss eine gültige URI sein.");
         }
     }
 }

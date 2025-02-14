@@ -1,3 +1,5 @@
+using Lokumbus.CoreAPI.Models.ValueObjects;
+
 namespace Lokumbus.CoreAPI.DTOs
 {
     /// <summary>
@@ -73,6 +75,6 @@ namespace Lokumbus.CoreAPI.DTOs
         /// <summary>
         /// Additional metadata associated with the Organizer.
         /// </summary>
-        public Dictionary<string, object>? Metadata { get; set; }
+        public List<MetaEntry>? Metadata { get; set; }
     }
 }

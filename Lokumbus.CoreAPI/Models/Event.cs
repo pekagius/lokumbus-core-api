@@ -45,7 +45,7 @@ namespace Lokumbus.CoreAPI.Models
         public ICollection<Sponsorship> Sponsorships { get; set; } = new List<Sponsorship>();
         public ICollection<Discount> Discounts { get; set; } = new List<Discount>();
         public ICollection<Invite> Invites { get; set; } = new List<Invite>();
-        public Dictionary<string, object>? Metadata { get; set; }
+        public List<MetaEntry>? Metadata { get; set; }
         public bool IsActive { get; set; }
     }
 }

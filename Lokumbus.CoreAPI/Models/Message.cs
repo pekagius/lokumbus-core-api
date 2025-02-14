@@ -26,7 +26,7 @@ namespace Lokumbus.CoreAPI.Models
         public DateTime? ReadAt { get; set; }
         public string? Subject { get; set; }
         public ICollection<Attachment> Attachments { get; set; } = new List<Attachment>();
-        public Dictionary<string, object>? Metadata { get; set; }
+        public List<MetaEntry>? Metadata { get; set; }
 
         public abstract void Send();
         public abstract void Retry();

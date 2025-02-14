@@ -1,3 +1,5 @@
+using Lokumbus.CoreAPI.Models.ValueObjects;
+
 namespace Lokumbus.CoreAPI.DTOs.Update
 {
     /// <summary>
@@ -18,6 +20,6 @@ namespace Lokumbus.CoreAPI.DTOs.Update
         /// <summary>
         /// Zusätzliche Metadaten zur Freundschaft.
         /// </summary>
-        public Dictionary<string, object>? Metadata { get; set; }
+        public List<MetaEntry>? Metadata { get; set; }
     }
 }

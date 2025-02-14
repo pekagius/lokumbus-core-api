@@ -1,6 +1,7 @@
 using System;
 using Lokumbus.CoreAPI.Models;
 using Lokumbus.CoreAPI.Models.Enumerations;
+using Lokumbus.CoreAPI.Models.ValueObjects;
 
 namespace Lokumbus.CoreAPI.DTOs
 {
@@ -102,6 +103,6 @@ namespace Lokumbus.CoreAPI.DTOs
         /// <summary>
         /// Metadata associated with the Auth entry.
         /// </summary>
-        public Dictionary<string, object>? Metadata { get; set; }
+        public List<MetaEntry>? Metadata { get; set; }
     }
 }

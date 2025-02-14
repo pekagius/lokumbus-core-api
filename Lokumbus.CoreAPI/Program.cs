@@ -2,6 +2,7 @@ using System.Reflection;
 using System.Text;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using GraphQL.AspNet.Configuration;
 using Lokumbus.CoreAPI.Configuration;
 using Lokumbus.CoreAPI.Configuration.Bootstrapping;
 using Lokumbus.CoreAPI.Configuration.Mapster;
@@ -85,6 +86,7 @@ builder.Services.AddScoped<IReminderService, ReminderService>();
 builder.Services.AddScoped<IReviewService, ReviewService>();
 builder.Services.AddScoped<ISponsorshipService, SponsorshipService>();
 builder.Services.AddScoped<ITicketService, TicketService>();
+builder.Services.AddScoped<ISocialAuthService, SocialAuthService>();
 
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateAuthDtoValidator>();
@@ -167,6 +169,7 @@ builder.Services.AddCors(options =>
 
 builder.Services.Configure<KafkaSettings>(builder.Configuration.GetSection("KafkaSettings"));
 builder.Services.AddHostedService<BootstrapKafka>();
+builder.Services.AddGraphQL();
 
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
@@ -174,6 +177,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+// Configure the HTTP request pipeline.
+app.UseGraphQL();
+app.UseGraphQLAltair("/graphql/altair");
 
 // Use HTTPS Redirection Middleware
 app.UseHttpsRedirection();

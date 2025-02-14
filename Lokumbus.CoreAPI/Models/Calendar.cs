@@ -1,4 +1,5 @@
 using Lokumbus.CoreAPI.Models.Enumerations;
+using Lokumbus.CoreAPI.Models.ValueObjects;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -11,14 +12,14 @@ namespace Lokumbus.CoreAPI.Models
         public string Id { get; set; }
         public string? Name { get; set; }
         public string? Description { get; set; }
-        public string OwnerId { get; set; }
+        public string? OwnerId { get; set; }
         public OwnerType OwnerType { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public bool IsPublic { get; set; }
         public string? TimeZone { get; set; }
         public ICollection<Event> Events { get; set; } = new List<Event>();
-        public Dictionary<string, object>? Metadata { get; set; }
+        public List<MetaEntry>? Metadata { get; set; }
 
         public void AddEvent(Event @event)
         {

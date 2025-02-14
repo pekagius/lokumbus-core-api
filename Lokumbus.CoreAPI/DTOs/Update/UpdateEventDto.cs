@@ -157,6 +157,6 @@ namespace Lokumbus.CoreAPI.DTOs.Update
         /// <summary>
         /// Additional metadata associated with the Event.
         /// </summary>
-        public Dictionary<string, object>? Metadata { get; set; }
+        public List<MetaEntry>? Metadata { get; set; }
     }
 }

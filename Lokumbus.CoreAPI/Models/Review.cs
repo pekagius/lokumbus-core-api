@@ -1,3 +1,4 @@
+using Lokumbus.CoreAPI.Models.ValueObjects;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -16,7 +17,7 @@ namespace Lokumbus.CoreAPI.Models
         public string? Comment { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
-        public Dictionary<string, object>? Metadata { get; set; }
+        public List<MetaEntry>? Metadata { get; set; }
         public bool IsActive { get; set; }
     }
 }

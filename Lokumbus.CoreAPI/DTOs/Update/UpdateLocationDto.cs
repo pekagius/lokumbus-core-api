@@ -49,7 +49,7 @@ public class UpdateLocationDto
     /// <summary>
     /// Additional metadata associated with the Location.
     /// </summary>
-    public Dictionary<string, object>? Metadata { get; set; }
+    public List<MetaEntry>? Metadata { get; set; }
 
     /// <summary>
     /// List of Restriction IDs associated with the Location.

@@ -1,4 +1,6 @@
 using Lokumbus.CoreAPI.Models.Enumerations;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace Lokumbus.CoreAPI.Models.SubClasses
 {
@@ -6,29 +8,25 @@ namespace Lokumbus.CoreAPI.Models.SubClasses
     {
         public string? AlertId { get; set; }
         public Alert? Alert { get; set; }
-        
+
         public override void Send()
-    {
-        foreach (var channel in Channels)
         {
-        
-            switch (channel)
+            foreach (var channel in Channels)
             {
-                case MessageChannel.Direct:
-                    
-                    break;
-                case MessageChannel.Email:
-                  
-                    break;
-                case MessageChannel.Chat:
-                   
-                    break;
-                case MessageChannel.Kafka:
-                    
-                    break;
+                switch (channel)
+                {
+                    case MessageChannel.Direct:
+                        break;
+                    case MessageChannel.Email:
+                        break;
+                    case MessageChannel.Chat:
+                        break;
+                    case MessageChannel.Kafka:
+                        break;
+                }
             }
         }
-    }
+
         public override void Retry() { /* Implementierung */ }
         public override void MarkAsDelivered() { /* Implementierung */ }
         public override void MarkAsRead() { /* Implementierung */ }

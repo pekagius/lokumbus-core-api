@@ -1,4 +1,5 @@
 using JetBrains.Annotations;
+using Lokumbus.CoreAPI.Models.ValueObjects;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -31,7 +32,7 @@ public class AppUser
     public DateTime? ResetPasswordTokenExpiresAt { get; set; }
     public string? LastLoginIpAddress { get; set; }
     public DateTime? LastLoginAt { get; set; }
-    public Dictionary<string, object>? Metadata { get; set; }
+    public List<MetaEntry>? Metadata { get; set; }
     public string? RefreshToken { get; set; }
     public DateTime? RefreshTokenExpiryTime { get; set; }
     

@@ -42,11 +42,6 @@ namespace Lokumbus.CoreAPI.Configuration.Validators.Create
             RuleFor(x => x.EndDate)
                 .GreaterThanOrEqualTo(x => x.StartDate).WithMessage("EndDate must be after StartDate.")
                 .When(x => x.StartDate.HasValue && x.EndDate.HasValue);
-
-            // Validate Metadata
-            RuleFor(x => x.Metadata)
-                .Must(metadata => metadata == null || metadata.Length <= 1000)
-                .WithMessage("Metadata must not exceed 1000 characters.");
         }
     }
 }
